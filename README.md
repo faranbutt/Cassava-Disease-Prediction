@@ -58,3 +58,10 @@ mlflow ui \
 
 
 ```
+
+## Streamlit Interface:
+![Streamlit UI](images/streamlitui.png)
+
+## Model Serving
+
+![Triton](images/tition.png)

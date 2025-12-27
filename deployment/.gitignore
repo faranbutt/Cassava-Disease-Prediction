@@ -1,0 +1,14 @@
+# Ignore the large original backups
+*.bak
+triton/**/*.bak
+
+# Ignore local Python environment/IDE files
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+.env
+.ipynb_checkpoints/
+
+# Optional: If you want to keep the repo even lighter, 
+# you could ignore all .onnx files and use Git LFS (recommended)image.jpg

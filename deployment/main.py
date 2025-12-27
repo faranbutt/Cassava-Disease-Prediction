@@ -37,3 +37,6 @@ if uploaded_file is not None:
         st.success(f"Prediction: {labels[str(pred_idx)]}")
     except Exception as e:
         st.error(f"Error connecting to Triton server: {e}")    
+
+
+

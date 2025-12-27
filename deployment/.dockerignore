@@ -1,0 +1,10 @@
+# Ignore the large original models
+triton/**/*.bak
+triton/model1/1/model.onnx.bak
+triton/model2/1/model.onnx.bak
+triton/model3/1/model.onnx.bak
+
+# Ignore local python cache
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store

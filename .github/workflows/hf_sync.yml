@@ -14,19 +14,33 @@ jobs:
           fetch-depth: 0
           lfs: true
 
-      - name: Install Git LFS
-        run: git lfs install
-
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          # 1. Configure Git
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-          # 1. Create the subtree branch
-          git subtree split --prefix deployment -b hf-sync
+          # 2. Enter the deployment directory and start a fresh history
+          # This wipes out the 'ghost' history of deleted binary files
+          cd deployment
+          rm -rf .git
+          git init
+          git lfs install
           
-          # 2. Force push the subtree branch to the remote main branch
-          # The --force flag will overwrite the remote history with your local 'deployment' folder
-          git push https://faranbutt789:$HF_TOKEN@huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection hf-sync:main --force
+          # 3. Explicitly track all binary types with LFS
+          git lfs track "*.jpg"
+          git lfs track "*.png"
+          git lfs track "*.onnx"
+          git lfs track "*.bin"
+          git lfs track "*.pb"
+          git lfs track "*.pt"
+          
+          # 4. Create the new clean commit
+          git add .
+          git commit -m "Deployment sync: $(date)"
+          
+          # 5. Force push to Hugging Face
+          # Note: We push the local 'master/main' of this subfolder to the remote 'main'
+          git push https://faranbutt789:$HF_TOKEN@huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection HEAD:main --force

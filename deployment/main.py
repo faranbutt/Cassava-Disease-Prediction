@@ -10,7 +10,7 @@ with open('labels.json') as f:
 st.title("Cassava Disease Classification")
 st.write("Drop an image of a cassava leaf to get prediction.")
 
-uploaded_file = st.file_uploader("Choose and image....",type=['jpg','jpeg','png'])
+uploaded_file = st.file_uploader("Choose and image...",type=['jpg','jpeg','png'])
 if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)

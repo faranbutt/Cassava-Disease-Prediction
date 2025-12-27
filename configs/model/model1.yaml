@@ -1,0 +1,8 @@
+# configs/model/model1.yaml
+name: vit_base_patch16_384
+img_size: 384
+use_multidrop: false
+use_attention: false
+label_smoothing: 0.0
+divide_image: false
+pretrained: true

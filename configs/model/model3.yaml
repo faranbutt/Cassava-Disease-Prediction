@@ -1,0 +1,8 @@
+# configs/model/model3.yaml
+name: vit_base_patch16_224
+img_size: 448
+use_multidrop: true
+use_attention: true
+attention_pattern: "B"
+label_smoothing: 0.01
+divide_image: true

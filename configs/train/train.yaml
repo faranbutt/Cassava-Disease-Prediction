@@ -1,0 +1,18 @@
+# working/Cassava-Disease-Detection/configs/train/train.yaml
+batch_size: 32
+epochs: 4
+lr: 1e-4
+precision: "16-mixed"
+num_workers: 2
+seed: 1006
+n_splits: 2
+patience: 5
+log_every_n_steps: 10
+
+# mlflow:
+#   tracking_uri: "http://127.0.0.1:8080"
+#   experiment_name: "cassava-disease-classification"
+mlflow:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: "cassava-disease-classification"
+  artifact_location: "./mlartifacts" 

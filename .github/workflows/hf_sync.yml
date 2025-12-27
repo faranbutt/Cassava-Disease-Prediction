@@ -1,0 +1,27 @@
+name: Sync Subdirectory to Hugging Face
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'deployment/**' # Only runs when files in deployment/ change
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # 1. Clean up git subtree metadata if it exists
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          
+          # 2. Push only the 'deployment' folder content to HF root
+          # Replace 'faranbutt789' with your HF username and 'Cassava_Leaf_Disease_Detection' with your Space name
+          git subtree push --prefix deployment https://faranbutt789:$HF_TOKEN@huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection main

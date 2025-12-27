@@ -34,7 +34,7 @@ if uploaded_file is not None:
                                  json=payload)
         pred_probs = response.json()["outputs"][0]["data"]
         pred_idx = np.argmax(pred_probs)
-        st.success(f"Prediction: {labels[str(pred_idx)]}")
+        st.success(f"Prediction : {labels[str(pred_idx)]}")
     except Exception as e:
         st.error(f"Error connecting to Triton server: {e}")    
 

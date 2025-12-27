@@ -3,10 +3,8 @@ import numpy as np
 import triton_python_backend_utils as pb_utils
 from albumentations import Resize, Normalize, Compose
 import cv2
-
 class TritonPythonModel:
     def initialize(self, args):
-        # Preprocessing for different model sizes
         self.transform_384 = Compose([
             Resize(384, 384),
             Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
@@ -20,72 +18,16 @@ class TritonPythonModel:
     def preprocess(self, image, size):
         image = cv2.resize(image, (size, size))
         image = image.astype(np.float32) / 255.0
-        image = (image - 0.5) / 0.5        # normalize
-        image = np.transpose(image, (2, 0, 1))  # HWC → CHW
+        image = (image - 0.5) / 0.5       
+        image = np.transpose(image, (2, 0, 1))  
         return image
 
-    # def execute(self, requests):
-    #     responses = []
-    #     for request in requests:
-    #         # Get raw HWC uint8 image
-    #         input_tensor = pb_utils.get_input_tensor_by_name(request, "INPUT_IMAGE")
-    #         image = input_tensor.as_numpy()  # HWC, uint8, RGB
-            
-    #         # Preprocess for each model
-    #         img384 = np.expand_dims(self.preprocess(image, 384), axis=0)
-    #         img448 = np.expand_dims(self.preprocess(image, 448), axis=0) # (3,448,448)
-
-    #         # Add batch dimension for inference (Triton ONNX expects batched input even with max_batch_size=0)
-
-    #         # Inference requests
-    #         infer1 = pb_utils.InferenceRequest(
-    #             model_name="model1",
-    #             inputs=[pb_utils.Tensor("input", img384)],
-    #             requested_output_names=["output"]
-    #         )
-
-    #         infer2 = pb_utils.InferenceRequest(
-    #             model_name="model2",
-    #             inputs=[pb_utils.Tensor("input", img448)],
-    #             requested_output_names=["output"]
-    #         )
-    #         infer3 = pb_utils.InferenceRequest(
-    #             model_name="model3",
-    #             inputs=[pb_utils.Tensor("input", img448)],
-    #             requested_output_names=["output"]
-    #         )
-
-    #         # Execute
-    #         responses_async = pb_utils.infer_async([infer1, infer2, infer3])
-    #         results = pb_utils.get_output_tensors(responses_async)
-
-    #         # Get outputs (shape: [1,5] → squeeze to [5])
-    #         out1 = results[0][0].as_numpy().squeeze()
-    #         out2 = results[1][0].as_numpy().squeeze()
-    #         out3 = results[2][0].as_numpy().squeeze()
-
-    #         # Apply softmax if models output logits
-    #         probs1 = self._softmax(out1)
-    #         probs2 = self._softmax(out2)
-    #         probs3 = self._softmax(out3)
-
-    #         # Weighted ensemble
-    #         final_probs = (
-    #             self.weights[0] * probs1 +
-    #             self.weights[1] * probs2 +
-    #             self.weights[2] * probs3
-    #         )
-
-    #         output_tensor = pb_utils.Tensor("ENSEMBLE_OUTPUT", final_probs)
-    #         responses.append(pb_utils.InferenceResponse([output_tensor]))
-
-    #     return responses
     def execute(self, requests):
         responses = []
 
         for request in requests:
             input_tensor = pb_utils.get_input_tensor_by_name(request, "INPUT_IMAGE")
-            image = input_tensor.as_numpy()  # HWC uint8
+            image = input_tensor.as_numpy() 
 
             img384 = np.expand_dims(self.preprocess(image, 384), axis=0)
             img448 = np.expand_dims(self.preprocess(image, 448), axis=0)
@@ -108,7 +50,6 @@ class TritonPythonModel:
                 requested_output_names=["output"]
             )
 
-            # ✅ Correct execution
             resp1 = infer1.exec()
             resp2 = infer2.exec()
             resp3 = infer3.exec()

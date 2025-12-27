@@ -1,12 +1,8 @@
-# working/Cassava-Disease-Detection/src/cassava_classifier/utils/preprocessing.py
 from pathlib import Path
-
 import cv2
 import pandas as pd
 
-
 def clean_labels(df, data_path: str):
-    """Remove corrupted/invalid images"""
     cleaned = []
     for img, label in zip(df["image_id"], df["label"]):
         path = Path(data_path) / "train_images" / img

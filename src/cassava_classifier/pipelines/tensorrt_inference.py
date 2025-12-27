@@ -1,13 +1,7 @@
-# working/Cassava-Disease-Detection/src/cassava_classifier/pipelines/tensorrt_inference.py
-"""
-TensorRT inference module for Cassava disease classification
-Supports both single models and the ensemble approach from the 3rd place solution
-"""
-
 import numpy as np
 import tensorrt as trt
 import pycuda.driver as cuda
-import pycuda.autoinit  # Initializes CUDA context
+import pycuda.autoinit 
 import cv2
 import torch
 from albumentations import Compose, Normalize, Resize
@@ -40,7 +34,7 @@ class TensorRTInfer:
     def _allocate_buffers(self):
         inputs = []
         outputs = []
-        bindings = {}  # name → device ptr
+        bindings = {} 
         stream = cuda.Stream()
 
         for i in range(self.engine.num_io_tensors):
@@ -75,20 +69,12 @@ class TensorRTInfer:
         input_data = self.preprocess(image_path)
         input_name = self.inputs[0]['name']
         output_name = self.outputs[0]['name']
-
-        # Set shapes and addresses
         self.context.set_input_shape(input_name, input_data.shape)
         self.context.set_tensor_address(input_name, self.inputs[0]['device'])
         self.context.set_tensor_address(output_name, self.outputs[0]['device'])
-
-        # Copy input
         np.copyto(self.inputs[0]["host"], input_data.ravel())
         cuda.memcpy_htod_async(self.inputs[0]["device"], self.inputs[0]["host"], self.stream)
-
-        # Run
         self.context.execute_async_v3(stream_handle=self.stream.handle)
-
-        # Copy output
         cuda.memcpy_dtoh_async(self.outputs[0]["host"], self.outputs[0]["device"], self.stream)
         self.stream.synchronize()
 
@@ -121,13 +107,6 @@ class TensorRTInfer:
         probs = torch.softmax(torch.tensor(weighted), dim=1).numpy()[0]
         pred_class = int(np.argmax(probs))
         return pred_class, probs
-
-    # dinfef er(self, image_path: str):
-    #     is_divided = self.model_config.get("divide_image", False)
-    #     if is_divided:
-    #         return self._infer_divided_image(image_path)
-    #     else:
-    #         return self._infer_standard(image_path)
 
     def preprocess(self, image_path: str) -> np.ndarray:
         if not Path(image_path).exists():
@@ -184,27 +163,15 @@ class TensorRTInfer:
         return self._infer_standard(image_path)
 
     def benchmark(self, image_path: str, num_runs: int = 100) -> dict:
-        """
-        Benchmark inference performance.
-        
-        Args:
-            image_path: Path to test image
-            num_runs: Number of inference runs
-            
-        Returns:
-            Dictionary with timing statistics
-        """
-        # Warm up
         for _ in range(10):
             self.infer(image_path)
-        
-        # Benchmark
+
         times = []
         for _ in range(num_runs):
             start = time.perf_counter()
             self.infer(image_path)
             end = time.perf_counter()
-            times.append((end - start) * 1000)  # Convert to milliseconds
+            times.append((end - start) * 1000)
         
         return {
             "mean_ms": np.mean(times),
@@ -227,27 +194,15 @@ class TensorRTInfer:
 
 
 class EnsembleTensorRTInfer:
-    """
-    Ensemble inference using multiple TensorRT engines.
-    Implements the 3rd place solution's weighted ensemble approach.
-    """
     
     def __init__(self, engine_paths: List[str], model_configs: List[DictConfig], weights: Optional[List[float]] = None):
-        """
-        Initialize ensemble of TensorRT engines.
-        
-        Args:
-            engine_paths: List of paths to .trt engine files
-            model_configs: List of model configurations (one per engine)
-            weights: Weighting for each model in the ensemble (default: [0.4, 0.3, 0.3])
-        """
         if weights is None:
-            weights = [0.4, 0.3, 0.3]  # Default weights from competition solution
+            weights = [0.4, 0.3, 0.3]
             
         if len(engine_paths) != len(model_configs) or len(engine_paths) != len(weights):
             raise ValueError("engine_paths, model_configs, and weights must have the same length")
             
-        self.weights = np.array(weights) / np.sum(weights)  # Normalize weights
+        self.weights = np.array(weights) / np.sum(weights) 
         self.models = []
         
         print(f"🚀 Initializing ensemble of {len(engine_paths)} TensorRT engines")
@@ -261,18 +216,7 @@ class EnsembleTensorRTInfer:
         self.class_names = ["CBB", "CBSD", "CGM", "CMD", "Healthy"]
 
     def infer(self, image_path: str) -> Tuple[int, np.ndarray, List[np.ndarray]]:
-        """
-        Run ensemble inference on a single image.
-        
-        Args:
-            image_path: Path to input image
-            
-        Returns:
-            Tuple of (predicted_class, ensemble_probabilities, individual_model_probabilities)
-        """
         print(f"🔮 Running ensemble inference on: {Path(image_path).name}")
-        
-        # Get predictions from each model
         all_probs = []
         model_names = ["vit_base_patch16_384", "vit_base_patch16_224-A", "vit_base_patch16_224-B"]
         
@@ -281,13 +225,10 @@ class EnsembleTensorRTInfer:
             all_probs.append(probs)
             print(f"  Model {i+1} ({model_names[i]}): Class {pred_class} ({self.class_names[pred_class]}) | " +
                   f"Top prob: {np.max(probs):.4f}")
-        
-        # Weighted averaging of predictions
+
         weighted_sum = np.zeros_like(all_probs[0])
         for i, probs in enumerate(all_probs):
             weighted_sum += self.weights[i] * probs
-        
-        # Get final prediction
         final_probs = weighted_sum
         pred_class = int(np.argmax(final_probs))
         
@@ -297,27 +238,16 @@ class EnsembleTensorRTInfer:
         return pred_class, final_probs, all_probs
 
     def benchmark(self, image_path: str, num_runs: int = 100) -> dict:
-        """
-        Benchmark ensemble inference performance.
         
-        Args:
-            image_path: Path to test image
-            num_runs: Number of inference runs
-            
-        Returns:
-            Dictionary with timing statistics
-        """
-        # Warm up
         for _ in range(10):
             self.infer(image_path)
         
-        # Benchmark
         times = []
         for _ in range(num_runs):
             start = time.perf_counter()
             self.infer(image_path)
             end = time.perf_counter()
-            times.append((end - start) * 1000)  # Convert to milliseconds
+            times.append((end - start) * 1000) 
         
         return {
             "mean_ms": np.mean(times),
@@ -339,32 +269,17 @@ class EnsembleTensorRTInfer:
 
 
 def load_ensemble_engines(cfg: DictConfig, weights: Optional[List[float]] = None) -> EnsembleTensorRTInfer:
-    """
-    Helper function to load the ensemble of TensorRT engines based on config.
-    
-    Args:
-        cfg: Configuration object
-        weights: Optional custom weights for ensemble
-        
-    Returns:
-        EnsembleTensorRTInfer instance
-    """
-    # Load model configurations
     model_configs = [
-        OmegaConf.load("configs/model/model1.yaml"),  # vit_base_patch16_384
-        OmegaConf.load("configs/model/model2.yaml"),  # vit_base_patch16_224 - A
-        OmegaConf.load("configs/model/model3.yaml")   # vit_base_patch16_224 - B
+        OmegaConf.load("configs/model/model1.yaml"),  
+        OmegaConf.load("configs/model/model2.yaml"), 
+        OmegaConf.load("configs/model/model3.yaml") 
     ]
-    
-    # Get engine paths
     engine_dirs = [
         Path(cfg.data.output_dir) / "models" / "model1",
         Path(cfg.data.output_dir) / "models" / "model2",
         Path(cfg.data.output_dir) / "models" / "model3",
     ]
     engine_paths = [str(d / "model.trt") for d in engine_dirs]
-    
-    # Verify all engines exist
     for path in engine_paths:
         if not Path(path).exists():
             raise FileNotFoundError(f"TensorRT engine not found: {path}. " +
@@ -372,8 +287,6 @@ def load_ensemble_engines(cfg: DictConfig, weights: Optional[List[float]] = None
     
     return EnsembleTensorRTInfer(engine_paths, model_configs, weights)
 
-
-# Example usage (can be removed or kept as documentation)
 if __name__ == "__main__":
     import argparse
     from hydra import compose, initialize
@@ -389,12 +302,8 @@ if __name__ == "__main__":
     parser.add_argument('--benchmark', action='store_true', help='Run benchmark instead of single inference')
     
     args = parser.parse_args()
-
-    # Use Hydra to compose config (respects 'defaults' in YAML)
     with initialize(version_base=None, config_path=args.config_path, job_name="trt_infer"):
         cfg = compose(config_name=args.config)
-
-    # Rest of your logic unchanged...
     if args.ensemble:
         print("🚀 Loading ensemble of TensorRT engines...")
         ensemble = load_ensemble_engines(cfg, weights=args.weights)

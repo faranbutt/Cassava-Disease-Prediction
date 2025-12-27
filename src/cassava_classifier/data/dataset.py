@@ -1,4 +1,3 @@
-# working/Cassava-Disease-Detection/src/cassava_classifier/data/dataset.py
 from pathlib import Path
 import cv2
 import torch

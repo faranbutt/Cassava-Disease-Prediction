@@ -10,12 +10,7 @@ from ..models.model import CassavaLightningModule
 
 
 def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictConfig):
-    """
-    Convert a trained PyTorch Lightning checkpoint to ONNX format.
-    Ensures all weights are embedded (no external .data files).
-    """
     torch.serialization.add_safe_globals([type(model_config)])
-
     model = CassavaLightningModule.load_from_checkpoint(
         checkpoint_path,
         model_config=model_config,
@@ -32,7 +27,6 @@ def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictCo
     Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
     try:
-        # 1. Export to temp location (ensures .data file is isolated)
         with tempfile.TemporaryDirectory() as tmpdir:
             temp_onnx = Path(tmpdir) / "model.onnx"
             
@@ -48,7 +42,6 @@ def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictCo
                 dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
             )
             
-            # 2. Reload and save to final location WITHOUT external data
             onnx_model = onnx.load(temp_onnx)
             onnx.save(onnx_model, output_path, save_as_external_data=False)
         

@@ -15,7 +15,7 @@ mlartifacts/
 plots/
 mlruns/
 *.ckpt
-*.onnx
+!deployment/triton/**/*.onnx
 *.engine
 *.trt
 *.db

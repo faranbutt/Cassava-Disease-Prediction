@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'deployment/**' # Only runs when files in deployment/ change
+      - 'deployment/**' 
 
 jobs:
   sync-to-hub:
@@ -14,14 +14,19 @@ jobs:
           fetch-depth: 0
           lfs: true
 
+      - name: Install Git LFS
+        run: git lfs install
+
       - name: Push to Hugging Face
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          # 1. Clean up git subtree metadata if it exists
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           
-          # 2. Push only the 'deployment' folder content to HF root
-          # Replace 'faranbutt789' with your HF username and 'Cassava_Leaf_Disease_Detection' with your Space name
-          git subtree push --prefix deployment https://faranbutt789:$HF_TOKEN@huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection main
+          # 1. Create the subtree branch
+          git subtree split --prefix deployment -b hf-sync
+          
+          # 2. Force push the subtree branch to the remote main branch
+          # The --force flag will overwrite the remote history with your local 'deployment' folder
+          git push https://faranbutt789:$HF_TOKEN@huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection hf-sync:main --force

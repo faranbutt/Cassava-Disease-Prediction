@@ -15,4 +15,4 @@ log_every_n_steps: 10
 mlflow:
   tracking_uri: "sqlite:///mlflow.db"
   experiment_name: "cassava-disease-classification"
-  artifact_location: "./mlartifacts" 
+  artifact_location: "./mlartifacts"

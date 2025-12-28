@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -9,20 +9,20 @@ repos:
         args: ["--maxkb=1024"]
 
   - repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 25.12.0
     hooks:
       - id: black
         language_version: python3.11
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 7.0.0
     hooks:
       - id: isort
         args: ["--profile", "black"]
         additional_dependencies: [wrapt]
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         args: ["--max-line-length=88"]

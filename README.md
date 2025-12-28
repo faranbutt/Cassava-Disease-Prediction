@@ -1,6 +1,6 @@
 # 🌿 Cassava Leaf Disease Classification
 
-A **high-performance, production-ready deep learning system** for cassava leaf disease classification, inspired by **3rd-place Kaggle competition solutions**.  
+A **high-performance, production-ready deep learning system** for cassava leaf disease classification, inspired by **3rd-place Kaggle competition solutions**.
 This project leverages **Vision Transformers (ViT)**, **image patch division**, **attention-based weighting**, and **ensemble learning**, wrapped inside a **full MLOps pipeline** from training to Triton-based deployment.
 
 ---
@@ -13,7 +13,7 @@ This project leverages **Vision Transformers (ViT)**, **image patch division**, 
 
 ## 📌 Problem Statement
 
-Cassava is a staple crop for over **800 million people worldwide**, yet it is highly vulnerable to leaf diseases that severely impact yield.  
+Cassava is a staple crop for over **800 million people worldwide**, yet it is highly vulnerable to leaf diseases that severely impact yield.
 Accurate and early detection is critical for disease management and food security.
 
 This repository provides an **end-to-end solution** for classifying cassava leaf diseases from images using state-of-the-art deep learning techniques.

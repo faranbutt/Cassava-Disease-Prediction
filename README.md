@@ -7,7 +7,7 @@ This project leverages **Vision Transformers (ViT)**, **image patch division**, 
 
 ## 🧠 Architecture Overview
 
-![View Architecture Diagram](images/arch.png)
+![View Architecture Diagram](images/archss.jpeg)
 
 ---
 

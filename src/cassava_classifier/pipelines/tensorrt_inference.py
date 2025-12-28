@@ -18,7 +18,12 @@ class TensorRTInfer:
         self.logger = trt.Logger(trt.Logger.WARNING)
         self.engine = self._load_engine()
         self.context = self.engine.create_execution_context()
-        self.inputs, self.outputs, self.bindings, self.stream = self._allocate_buffers()
+        (
+            self.inputs,
+            self.outputs,
+            self.bindings,
+            self.stream,
+        ) = self._allocate_buffers()
         self.device = "cuda"
         print(f"✅ TensorRT engine loaded: {self.engine_path.name}")
 
@@ -126,7 +131,8 @@ class TensorRTInfer:
         transform = Compose(
             [
                 Resize(
-                    height=self.model_config.img_size, width=self.model_config.img_size
+                    height=self.model_config.img_size,
+                    width=self.model_config.img_size,
                 ),
                 Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
             ]
@@ -149,7 +155,8 @@ class TensorRTInfer:
         transform = Compose(
             [
                 Resize(
-                    height=self.model_config.img_size, width=self.model_config.img_size
+                    height=self.model_config.img_size,
+                    width=self.model_config.img_size,
                 ),
             ]
         )
@@ -212,7 +219,6 @@ class TensorRTInfer:
 
 
 class EnsembleTensorRTInfer:
-
     def __init__(
         self,
         engine_paths: List[str],
@@ -224,7 +230,7 @@ class EnsembleTensorRTInfer:
 
         if len(engine_paths) != len(model_configs) or len(engine_paths) != len(weights):
             raise ValueError(
-                "engine_paths, model_configs, and weights must have the same length"
+                "engine_paths, model_configs, and weights must have " "the same length"
             )
 
         self.weights = np.array(weights) / np.sum(weights)
@@ -234,7 +240,7 @@ class EnsembleTensorRTInfer:
         print(f"  Using weights: {self.weights.tolist()}")
 
         for i, (path, config) in enumerate(zip(engine_paths, model_configs)):
-            print(f"  Loading model {i+1}/{len(engine_paths)}: {Path(path).name}")
+            print(f"  Loading model {i+1}/{len(engine_paths)}: " f"{Path(path).name}")
             self.models.append(TensorRTInfer(path, config))
 
         self.device = "cuda"
@@ -254,10 +260,10 @@ class EnsembleTensorRTInfer:
             all_probs.append(probs)
             cls_name = self.class_names[pred_class]
             top_prob = np.max(probs)
-            cls_name = self.class_names[pred_class]
-            top_prob = np.max(probs)
-            print(f"Model {i+1} ({model_names[i]}): {pred_class}-{cls_name}, Top prob: {top_prob:.4f}")
-
+            print(
+                f"Model {i+1}({model_names[i]}):{pred_class}-{cls_name}, "
+                f"Top prob:{top_prob:.4f}"
+            )
 
         weighted_sum = np.zeros_like(all_probs[0])
         for i, probs in enumerate(all_probs):
@@ -267,12 +273,10 @@ class EnsembleTensorRTInfer:
         cls_name = self.class_names[pred_class]
         print("✅ Ensemble prediction:", pred_class, "-", cls_name)
         print("Final probabilities:")
-        print( ", ".join([f"{p:.4f}" for p in final_probs]))
-        return pred_class,final_probs,all_probs
-
+        print(", ".join([f"{p:.4f}" for p in final_probs]))
+        return pred_class, final_probs, all_probs
 
     def benchmark(self, image_path: str, num_runs: int = 100) -> dict:
-
         for _ in range(10):
             self.infer(image_path)
 
@@ -320,7 +324,7 @@ def load_ensemble_engines(
         if not Path(path).exists():
             raise FileNotFoundError(
                 f"TensorRT engine not found: {path}. "
-                + "Run training with run_full=true to generate engines."
+                "Run training with run_full=true to generate engines."
             )
 
     return EnsembleTensorRTInfer(engine_paths, model_configs, weights)
@@ -340,7 +344,10 @@ if __name__ == "__main__":
         "--config", type=str, default="config", help="Config name (e.g., config)"
     )
     parser.add_argument(
-        "--config-path", type=str, default="../../../configs", help="Config directory"
+        "--config-path",
+        type=str,
+        default="../../../configs",
+        help="Config directory",
     )
     parser.add_argument(
         "--ensemble", action="store_true", help="Use ensemble of all 3 models"
@@ -371,20 +378,23 @@ if __name__ == "__main__":
             print("\n⏱️  Running benchmark...")
             results = ensemble.benchmark(args.image, num_runs=100)
             print(
-                f"\n📊 Benchmark Results (Ensemble of {results['models_count']} models):"
+                "\n📊 Benchmark Results (Ensemble of "
+                f"{results['models_count']} models):"
             )
             print(
-                f"   Mean inference time: {results['mean_ms']:.2f} ms ± {results['std_ms']:.2f} ms"
+                "   Mean inference time: "
+                f"{results['mean_ms']:.2f} ms ± {results['std_ms']:.2f} ms"
             )
             print(f"   FPS: {results['fps']:.2f}")
-            print(f"   Range: {results['min_ms']:.2f} - {results['max_ms']:.2f} ms")
+            print("   Range: " f"{results['min_ms']:.2f} - {results['max_ms']:.2f} ms")
         else:
             pred_class, probs, _ = ensemble.infer(args.image)
             class_names = ["CBB", "CBSD", "CGM", "CMD", "Healthy"]
 
             print("=" * 50)
             print(
-                f"ENSEMBLE RESULT: Predicted class {pred_class} - {class_names[pred_class]}"
+                "ENSEMBLE RESULT: Predicted class "
+                f"{pred_class} - {class_names[pred_class]}"
             )
             print("=" * 50)
             for i, prob in enumerate(probs):
@@ -404,19 +414,21 @@ if __name__ == "__main__":
         if args.benchmark:
             print("\n⏱️  Running benchmark...")
             results = infer.benchmark(args.image, num_runs=100)
-            print(f"\n📊 Benchmark Results:")
+            print("\n📊 Benchmark Results:")
             print(
-                f"   Mean inference time: {results['mean_ms']:.2f} ms ± {results['std_ms']:.2f} ms"
+                "   Mean inference time: "
+                f"{results['mean_ms']:.2f} ms ± {results['std_ms']:.2f} ms"
             )
             print(f"   FPS: {results['fps']:.2f}")
-            print(f"   Range: {results['min_ms']:.2f} - {results['max_ms']:.2f} ms")
+            print("   Range: " f"{results['min_ms']:.2f} - {results['max_ms']:.2f} ms")
         else:
             pred_class, probs = infer.infer(args.image)
             class_names = ["CBB", "CBSD", "CGM", "CMD", "Healthy"]
 
             print("=" * 50)
             print(
-                f"SINGLE MODEL RESULT: Predicted class {pred_class} - {class_names[pred_class]}"
+                "SINGLE MODEL RESULT: Predicted class "
+                f"{pred_class} - {class_names[pred_class]}"
             )
             print("=" * 50)
             for i, prob in enumerate(probs):

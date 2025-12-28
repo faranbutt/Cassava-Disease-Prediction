@@ -154,6 +154,16 @@ Triton config.pbtxt
 
 These artifacts are excluded from Git and managed locally or via deployment targets.
 
+## ⚡ Model Quantization
+
+To accelerate **CPU-based inference**, models are quantized to **FP16** using ONNX Runtime:
+
+- FP16 reduces memory usage and speeds up inference on CPU/GPU with minimal accuracy loss.
+- This was done to save space on the Huggingface repo as it only give 1GB of space
+
+
+Quantized models are saved as:
+
 ## 💾 Saved Models
 ![Saved Models](images/models.png)
 
@@ -214,6 +224,7 @@ CLI-based execution (Hydra)
 Cassava-Disease-Prediction/
 ├── configs/
 ├── deployment/
+│   └── quantization/
 │   └── triton/
 ├── images/
 ├── src/cassava_classifier/

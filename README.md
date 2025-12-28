@@ -15,7 +15,7 @@ Cassava is a vital crop for over 800 million people worldwide, but it is threate
 The pipeline supports full MLOps workflow: data management, training, validation, inference, and production deployment.
 
 ## Architechture
-![Triton](images/tition.png)
+![Arch](images/arch.png)
 
 ## 🛠️ Technical Setup
 

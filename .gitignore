@@ -43,3 +43,4 @@ train_images/
 test_images/
 train_tfrec/
 test_tfrec/
+.dvc/config.local

@@ -252,22 +252,24 @@ class EnsembleTensorRTInfer:
         for i, model in enumerate(self.models):
             pred_class, probs = model.infer(image_path)
             all_probs.append(probs)
-            print(
-                f"Model {i+1} ({model_names[i]}): Class {pred_class} ({self.class_names[pred_class]}), Top prob: {np.max(probs):.4f}"
-            )
+            cls_name = self.class_names[pred_class]
+            top_prob = np.max(probs)
+            cls_name = self.class_names[pred_class]
+            top_prob = np.max(probs)
+            print(f"Model {i+1} ({model_names[i]}): {pred_class}-{cls_name}, Top prob: {top_prob:.4f}")
+
 
         weighted_sum = np.zeros_like(all_probs[0])
         for i, probs in enumerate(all_probs):
             weighted_sum += self.weights[i] * probs
         final_probs = weighted_sum
         pred_class = int(np.argmax(final_probs))
+        cls_name = self.class_names[pred_class]
+        print("✅ Ensemble prediction:", pred_class, "-", cls_name)
+        print("Final probabilities:")
+        print( ", ".join([f"{p:.4f}" for p in final_probs]))
+        return pred_class,final_probs,all_probs
 
-        print(
-            f"✅ Ensemble prediction: Class {pred_class} ({self.class_names[pred_class]})"
-        )
-        print(f"   Final probabilities: {[f'{p:.4f}' for p in final_probs]}")
-
-        return pred_class, final_probs, all_probs
 
     def benchmark(self, image_path: str, num_runs: int = 100) -> dict:
 

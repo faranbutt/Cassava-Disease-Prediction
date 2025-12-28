@@ -63,6 +63,8 @@ mlflow ui \
   --port 8080 \
 ```
 
+## Deployment @ Hugging Face
+https://huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection 
 
 ## UI Interface:
 ![Streamlit UI](images/streamlitui.png)
@@ -82,6 +84,8 @@ MLFlow plots and logs metrics  for every model per fold
 
 ## Models Saved
 ![Models](images/models.png)
+
+
 
 
 ## Refrences:

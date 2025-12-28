@@ -12,7 +12,7 @@ from cassava_classifier.pipelines.train import (
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 print("CUDA available:", torch.cuda.is_available())
-print("GPU count:", torch.cuda.device_count())
+print("GPU counts:", torch.cuda.device_count())
 
 
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")

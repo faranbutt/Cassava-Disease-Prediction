@@ -99,6 +99,9 @@ This command fetches the following files:
 train.csv
 train_images/
 
+#### Drive Link:
+[Download Dataset from Google Drive](https://drive.google.com/drive/folders/1qNvcBVsUAuZs26JIs6Fo60yjMYYaPE6B?usp=sharing)
+
 ### 2️⃣ Run Full Pipeline
 ```bash
 MPLBACKEND=Agg python src/cassava_classifier/commands.py run_full=true

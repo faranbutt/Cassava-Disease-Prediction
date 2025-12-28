@@ -127,6 +127,9 @@ configs/
 
 ✅ No hardcoded values — everything is configurable.
 
+## 🖥️ Streamlit Interface
+![Streamlit UI](https://your-url-to-streamlitui-image.com)
+
 
 ## 📦 Production Artifacts
 
@@ -137,6 +140,9 @@ model.trt – Optimized TensorRT engine
 Triton config.pbtxt
 
 These artifacts are excluded from Git and managed locally or via deployment targets.
+
+## 💾 Saved Models
+![Saved Models](https://your-url-to-saved-models-image.com)
 
 ## 🔮 Inference Options
 
@@ -154,6 +160,10 @@ docker run --rm -p 8000:8000 \
   nvcr.io/nvidia/tritonserver:25.11-py3 \
   tritonserver --model-repository=/models
 ```
+
+## 🚀 Triton Model Serving
+![Triton Inference](https://your-url-to-triton-image.com)
+
 ## Supports:
 GPU (TensorRT)
 CPU-only (ONNX Runtime backend)
@@ -166,10 +176,17 @@ Hyperparameters
 - Per-fold results
 - Training curves
 
+
 ### Launch MLflow:
 ```bash
 mlflow ui --backend-store-uri sqlite:///mlflow.db --port 8080
 ```
+
+### 📊 MLflow Metrics
+![MLflow Metrics](https://your-url-to-mlflow-metrics-image.com)
+
+## 📈 Training Plots
+![Training Graphs](https://your-url-to-training-plots-image.com)
 
 ## 🧪 Code Quality
 black, isort, flake8

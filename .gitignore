@@ -44,3 +44,11 @@ test_images/
 train_tfrec/
 test_tfrec/
 .dvc/config.local
+dataset/raw/train.csv
+dataset/raw/sample_submission.csv
+dataset/raw/test_images/
+dataset/raw/train_images/
+dataset/raw/test_tfrecords/
+dataset/raw/test_tfrecords/
+dataset/raw/label_num_to_disease_map.json  
+/dataset

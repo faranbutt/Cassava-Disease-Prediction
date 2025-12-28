@@ -1,10 +1,6 @@
 [core]
-    remote = localstore
-['remote "hf-dataset"']
-    url = https://huggingface.co/datasets/faranbutt789/cassava-logs-dataset
-['remote "hf-logs"']
-    url = https://huggingface.co/datasets/faranbutt789/cassava_logs
-['remote "hf-model"']
-    url = https://huggingface.co/faranbutt789/cassava_models
-['remote "localstore"']
-    url = /kaggle/working/dvcstore
+    remote = myremote
+
+[remote "myremote"]
+    url = gdrive://1qNvcBVsUAuZs26JIs6Fo60yjMYYaPE6B
+    gdrive_acknowledge_abuse = true

@@ -1,4 +1,4 @@
-# triton/ensemble/1/model.py
+
 import numpy as np
 import triton_python_backend_utils as pb_utils
 from albumentations import Resize, Normalize, Compose
@@ -6,7 +6,6 @@ import cv2
 
 class TritonPythonModel:
     def initialize(self, args):
-        # Preprocessing for different model sizes
         self.transform_384 = Compose([
             Resize(384, 384),
             Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
@@ -20,8 +19,8 @@ class TritonPythonModel:
     def preprocess(self, image, size):
         image = cv2.resize(image, (size, size))
         image = image.astype(np.float32) / 255.0
-        image = (image - 0.5) / 0.5        # normalize
-        image = np.transpose(image, (2, 0, 1))  # HWC → CHW
+        image = (image - 0.5) / 0.5       
+        image = np.transpose(image, (2, 0, 1)) 
         return image
 
     def execute(self, requests):
@@ -29,7 +28,7 @@ class TritonPythonModel:
 
         for request in requests:
             input_tensor = pb_utils.get_input_tensor_by_name(request, "INPUT_IMAGE")
-            image = input_tensor.as_numpy()  # HWC uint8
+            image = input_tensor.as_numpy() 
 
             img384 = np.expand_dims(self.preprocess(image, 384), axis=0)
             img448 = np.expand_dims(self.preprocess(image, 448), axis=0)
@@ -52,7 +51,6 @@ class TritonPythonModel:
                 requested_output_names=["output"]
             )
 
-            # ✅ Correct execution
             resp1 = infer1.exec()
             resp2 = infer2.exec()
             resp3 = infer3.exec()

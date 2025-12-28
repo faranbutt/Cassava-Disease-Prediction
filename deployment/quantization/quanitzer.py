@@ -20,7 +20,6 @@ for name, path in models.items():
 
     try:
         model = onnx.load(path)
-        # 'disable_shape_infer=True' is the key to bypassing your error
         model_fp16 = float16.convert_float_to_float16(
             model, 
             keep_io_types=True, 

@@ -203,6 +203,8 @@ Pre-commit enforced
 Clean modular package structure
 CLI-based execution (Hydra)
 
+![Pre-commit Hooks](images/precommit.png)
+
 ## 📁 Project Structure
 ```bash
 Cassava-Disease-Prediction/

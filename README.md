@@ -128,7 +128,7 @@ configs/
 ✅ No hardcoded values — everything is configurable.
 
 ## 🖥️ Streamlit Interface
-![Streamlit UI](https://your-url-to-streamlitui-image.com)
+![Streamlit UI](images/streamlitui.png)
 
 
 ## 📦 Production Artifacts
@@ -142,7 +142,7 @@ Triton config.pbtxt
 These artifacts are excluded from Git and managed locally or via deployment targets.
 
 ## 💾 Saved Models
-![Saved Models](https://your-url-to-saved-models-image.com)
+![Saved Models](images/models.png)
 
 ## 🔮 Inference Options
 
@@ -162,7 +162,7 @@ docker run --rm -p 8000:8000 \
 ```
 
 ## 🚀 Triton Model Serving
-![Triton Inference](https://your-url-to-triton-image.com)
+![Triton Inference](images/tition.png)
 
 ## Supports:
 GPU (TensorRT)
@@ -183,10 +183,10 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db --port 8080
 ```
 
 ### 📊 MLflow Metrics
-![MLflow Metrics](https://your-url-to-mlflow-metrics-image.com)
+![MLflow Metrics](images/metrics.png)
 
 ## 📈 Training Plots
-![Training Graphs](https://your-url-to-training-plots-image.com)
+![Training Graphs](images/graphs.png)
 
 ## 🧪 Code Quality
 black, isort, flake8

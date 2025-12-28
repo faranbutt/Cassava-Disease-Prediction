@@ -48,22 +48,46 @@ uv run pre-commit install
 
 Commands:
 ```
-# run the app
-MPLBACKEND=Agg python src/cassava_classifier/commands.py ++run_full=true debug=true
-
-# run mlflow
+git clone https://github.com/faranbutt/Cassava-Disease-Prediction.git
+cd Cassava-Disease-Prediction
+uv venv
+source .venv/bin/activate
+uv pip install -e .
+uv pip uninstall tensorrt tensorrt-cu12 tensorrt-cu12_bindings tensorrt-cu12_libs
+uv pip install tensorrt==10.5.0 --extra-index-url https://pypi.nvidia.com
+MPLBACKEND=Agg python src/cassava_classifier/commands.py ++run_full=true
 mlflow ui \
   --backend-store-uri sqlite:///mlflow.db \
   --default-artifact-root ./mlartifacts \
   --host 0.0.0.0 \
   --port 8080 \
-  --allowed-hosts "https://36456e7dbb04.ngrok-free.app,127.0.0.1,localhost"
-
-
 ```
+
 
 ## UI Interface:
 ![Streamlit UI](images/streamlitui.png)
 
 ## Model Serving
 ![Triton](images/tition.png)
+
+## Metrics
+![Triton](images/metrics.png)
+
+## Metrics Versions
+MLFlow plots and logs metrics  for every model per fold 
+![Triton](images/runs.png)
+
+## Plots
+![plots](images/graphs.png)
+
+## Models Saved
+![Models](images/models.png)
+
+
+## Refrences:
+https://onnxruntime.ai/docs/performance/model-optimizations/quantization.html
+https://medium.com/@bskkim2022/accelerating-ai-inference-with-onnx-and-tensorrt-f9f43bd26854
+https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/docs/user_guide/performance_tuning.html
+https://www.kaggle.com/competitions/cassava-leaf-disease-classification/writeups/t0m-3rd-place-solution
+
+

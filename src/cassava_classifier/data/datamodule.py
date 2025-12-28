@@ -46,7 +46,7 @@ class CassavaDataModule(LightningDataModule):
         self.train_df = train_df
         self.val_df = val_df
         self.model_config = model_config
-        self.dataroot = dataroot 
+        self.dataroot = dataroot
         self.batch_size = batch_size
         self.num_workers = num_workers
 
@@ -54,14 +54,14 @@ class CassavaDataModule(LightningDataModule):
         if stage == "fit" or stage is None:
             self.train_dataset = CassavaDataset(
                 self.train_df,
-                self.dataroot, 
+                self.dataroot,
                 transform=get_transforms(self.model_config["img_size"], is_train=True),
                 divide_image=self.model_config.get("divide_image", False),
                 img_size=self.model_config["img_size"],
             )
             self.val_dataset = CassavaDataset(
                 self.val_df,
-                self.dataroot, 
+                self.dataroot,
                 transform=get_transforms(self.model_config["img_size"], is_train=False),
                 divide_image=self.model_config.get("divide_image", False),
                 img_size=self.model_config["img_size"],

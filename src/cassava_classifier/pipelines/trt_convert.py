@@ -2,9 +2,10 @@
 
 import argparse
 from pathlib import Path
-import torch
-import tensorrt as trt
+
 import onnx
+import tensorrt as trt
+import torch
 
 
 def build_engine(onnx_file: Path, engine_file: Path, fp16: bool = False):
@@ -53,6 +54,8 @@ def build_engine(onnx_file: Path, engine_file: Path, fp16: bool = False):
     with open(engine_file, "wb") as f:
         f.write(serialized_engine)
     print(f"✅ TensorRT saved → {engine_file}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--onnx", required=True)
@@ -60,5 +63,7 @@ def main():
     parser.add_argument("--fp16", action="store_true")
     args = parser.parse_args()
     build_engine(Path(args.onnx), Path(args.output), args.fp16)
+
+
 if __name__ == "__main__":
     main()

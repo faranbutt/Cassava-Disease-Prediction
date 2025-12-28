@@ -1,11 +1,11 @@
-# src/cassava_classifier/pipelines/convert.py
-from pathlib import Path
 import tempfile
+from pathlib import Path
+
 import onnx  # Add this import
 import torch
 import torch.serialization
 from omegaconf import DictConfig
-import omegaconf
+
 from ..models.model import CassavaLightningModule
 
 
@@ -15,7 +15,7 @@ def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictCo
         checkpoint_path,
         model_config=model_config,
         map_location="cpu",
-        weights_only=False
+        weights_only=False,
     )
     model.eval()
 
@@ -29,7 +29,7 @@ def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictCo
     try:
         with tempfile.TemporaryDirectory() as tmpdir:
             temp_onnx = Path(tmpdir) / "model.onnx"
-            
+
             torch.onnx.export(
                 model,
                 dummy_input,
@@ -41,10 +41,10 @@ def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictCo
                 output_names=["output"],
                 dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
             )
-            
+
             onnx_model = onnx.load(temp_onnx)
             onnx.save(onnx_model, output_path, save_as_external_data=False)
-        
+
         print(f"✅ Model successfully converted to ONNX: {output_path}")
         return True
     except Exception as e:

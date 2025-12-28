@@ -10,5 +10,5 @@ __pycache__/
 .env
 .ipynb_checkpoints/
 
-# Optional: If you want to keep the repo even lighter, 
+# Optional: If you want to keep the repo even lighter,
 # you could ignore all .onnx files and use Git LFS (recommended)image.jpg

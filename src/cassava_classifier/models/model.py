@@ -11,6 +11,7 @@ from .components import (
     MultiDropoutLinear,
 )
 
+
 class CassavaLightningModule(pl.LightningModule):
     def __init__(self, model_config, lr=1e-4):
         super().__init__()

@@ -1,4 +1,5 @@
 import os
+
 import onnx
 from onnxconverter_common import float16
 
@@ -21,9 +22,7 @@ for name, path in models.items():
     try:
         model = onnx.load(path)
         model_fp16 = float16.convert_float_to_float16(
-            model, 
-            keep_io_types=True, 
-            disable_shape_infer=True
+            model, keep_io_types=True, disable_shape_infer=True
         )
         onnx.save(model_fp16, output_path)
         print(f"✅ Success: {output_path}")

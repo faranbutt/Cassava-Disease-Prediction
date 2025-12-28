@@ -1,6 +1,8 @@
 from pathlib import Path
+
 import cv2
 import pandas as pd
+
 
 def clean_labels(df, data_path: str):
     cleaned = []

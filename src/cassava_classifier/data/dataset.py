@@ -1,7 +1,9 @@
 from pathlib import Path
+
 import cv2
 import torch
 from torch.utils.data import Dataset
+
 
 class CassavaDataset(Dataset):
     def __init__(self, df, data_path, transform=None, divide_image=False, img_size=384):

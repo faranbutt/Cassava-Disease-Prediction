@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+
+
 class MultiDropoutLinear(nn.Module):
     def __init__(self, in_features, out_features, n_drops=5, dropout_rate=0.5):
         super().__init__()
@@ -14,6 +16,8 @@ class MultiDropoutLinear(nn.Module):
             return out
         else:
             return self.fc(x)
+
+
 class AttentionWeighting(nn.Module):
     def __init__(self, n_features, pattern="A"):
         super().__init__()

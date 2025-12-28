@@ -130,6 +130,15 @@ configs/
 ## 🖥️ Streamlit Interface
 ![Streamlit UI](images/streamlitui.png)
 
+## 🌐 Hugging Face Deployment
+
+You can interact with the live model via **Hugging Face Spaces**, deployed automatically using **GitHub Actions**:
+
+[Try the Cassava Leaf Disease Detector](https://huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection)
+
+> ⚡ *Note:* The deployment is linked to this repository and automatically updates via GitHub Actions whenever changes are pushed to the `main` branch.
+
+
 
 ## 📦 Production Artifacts
 

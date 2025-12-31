@@ -3,17 +3,17 @@
 defaults:
   - model: model1
   - train: train
-  - data: data    # ← Fixed!
+  - data: data    
   - _self_
 
 model_name: "model1"
-debug: true       # ← Set to true for testing
+debug: true       
 debug_samples: 100
 run_full: false
 
 artifacts:
-  save_ckpt: false      # default: no
-  save_onnx: true       # always yes
+  save_ckpt: false      
+  save_onnx: true      
 
 predict:
   model_path: "models/model1/model_best.ckpt"

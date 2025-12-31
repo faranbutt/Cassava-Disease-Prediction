@@ -8,7 +8,7 @@ models = {
     "model2": "triton/model2/1/model.onnx",
     "model3": "triton/model3/1/model.onnx",
 }
-
+print("onnx is quantizing")
 output_dir = "triton_quantized"
 os.makedirs(output_dir, exist_ok=True)
 

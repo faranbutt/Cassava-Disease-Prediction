@@ -18,29 +18,18 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          # 1. Configure Git
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-
-          # 2. Enter the deployment directory and start a fresh history
-          # This wipes out the 'ghost' history of deleted binary files
+          git config --global user.name "github-actions[bot]
           cd deployment
           rm -rf .git
           git init
           git lfs install
-
-          # 3. Explicitly track all binary types with LFS
           git lfs track "*.jpg"
           git lfs track "*.png"
           git lfs track "*.onnx"
           git lfs track "*.bin"
           git lfs track "*.pb"
           git lfs track "*.pt"
-
-          # 4. Create the new clean commit
           git add .
           git commit -m "Deployment sync: $(date)"
-
-          # 5. Force push to Hugging Face
-          # Note: We push the local 'master/main' of this subfolder to the remote 'main'
           git push https://faranbutt789:$HF_TOKEN@huggingface.co/spaces/faranbutt789/Cassava_Leaf_Disease_Detection HEAD:main --force

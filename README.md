@@ -21,6 +21,41 @@ This repository provides an **end-to-end solution** for classifying cassava leaf
 
 ---
 
+## 📁 Project Structure
+```bash
+Cassava-Disease-Prediction/
+├── configs/
+├── deployment/
+│   └── quantization/
+│   └── triton/
+├── src/cassava_classifier/
+│   ├── data/
+│   ├── models/
+│   ├── pipelines/
+│   └── utils/
+├── images/
+├── artifacts/
+├── plots/
+├── models/
+│   ├── model1/
+|   |   ├── model1_best.ckpt
+|   |   ├── model1_best.onnx
+|   |   ├── model1_best.trt
+│   ├── model3/
+|   |   ├── model2_best.ckpt
+|   |   ├── model2_best.onnx
+|   |   ├── model2_best.trt
+│   ├── model3/
+|   |   ├── model3_best.ckpt
+|   |   ├── model3_best.onnx
+|   |   ├── model3_best.trt
+├── data.dvc
+├── pyproject.toml
+└── README.md
+```
+
+---
+
 ## 🚀 Key Features
 
 - **Ensemble of 3 Vision Transformer models**
@@ -219,23 +254,7 @@ CLI-based execution (Hydra)
 
 ![Pre-commit Hooks](images/precommit.png)
 
-## 📁 Project Structure
-```bash
-Cassava-Disease-Prediction/
-├── configs/
-├── deployment/
-│   └── quantization/
-│   └── triton/
-├── images/
-├── src/cassava_classifier/
-│   ├── data/
-│   ├── models/
-│   ├── pipelines/
-│   └── utils/
-├── data.dvc
-├── pyproject.toml
-└── README.md
-```
+
 
 ## 🔗 References
 

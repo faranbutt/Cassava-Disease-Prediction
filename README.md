@@ -257,7 +257,7 @@ CLI-based execution (Hydra)
 
 
 ## 🔗 References
-
+- [MlOps Guide by GraviRaja](https://github.com/graviraja/MLOps-Basics)
 - [Kaggle 3rd-Place Solution](https://www.kaggle.com/competitions/cassava-leaf-disease-classification/writeups/t0m-3rd-place-solution)
 - [ONNX Runtime Quantization](https://onnxruntime.ai/docs/performance/model-optimizations/quantization.html)
 - [NVIDIA TensorRT Optimization](https://developer.nvidia.com/tensorrt)

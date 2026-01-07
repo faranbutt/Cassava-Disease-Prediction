@@ -25,7 +25,7 @@ class TensorRTInfer:
             self.stream,
         ) = self._allocate_buffers()
         self.device = "cuda"
-        print(f"✅ TensorRT engine loaded: {self.engine_path.name}")
+        print(f"tensorrt engine loaded: {self.engine_path.name}")
 
     def _load_engine(self):
         if not self.engine_path.exists():
@@ -236,18 +236,18 @@ class EnsembleTensorRTInfer:
         self.weights = np.array(weights) / np.sum(weights)
         self.models = []
 
-        print(f"🚀 Initializing ensemble of {len(engine_paths)} TensorRT engines")
-        print(f"  Using weights: {self.weights.tolist()}")
+        print(f"initializing ensemble of {len(engine_paths)} TensorRT engines")
+        print(f"using weights: {self.weights.tolist()}")
 
         for i, (path, config) in enumerate(zip(engine_paths, model_configs)):
-            print(f"  Loading model {i+1}/{len(engine_paths)}: " f"{Path(path).name}")
+            print(f"Loading model {i+1}/{len(engine_paths)}: " f"{Path(path).name}")
             self.models.append(TensorRTInfer(path, config))
 
         self.device = "cuda"
         self.class_names = ["CBB", "CBSD", "CGM", "CMD", "Healthy"]
 
     def infer(self, image_path: str) -> Tuple[int, np.ndarray, List[np.ndarray]]:
-        print(f"🔮 Running ensemble inference on: {Path(image_path).name}")
+        print(f"Running ensemble inference on: {Path(image_path).name}")
         all_probs = []
         model_names = [
             "vit_base_patch16_384",
@@ -271,7 +271,7 @@ class EnsembleTensorRTInfer:
         final_probs = weighted_sum
         pred_class = int(np.argmax(final_probs))
         cls_name = self.class_names[pred_class]
-        print("✅ Ensemble prediction:", pred_class, "-", cls_name)
+        print("Ensemble prediction:", pred_class, "-", cls_name)
         print("Final probabilities:")
         print(", ".join([f"{p:.4f}" for p in final_probs]))
         return pred_class, final_probs, all_probs
@@ -371,14 +371,14 @@ if __name__ == "__main__":
     ):
         cfg = compose(config_name=args.config)
     if args.ensemble:
-        print("🚀 Loading ensemble of TensorRT engines...")
+        print("Loading ensemble of TensorRT engines...")
         ensemble = load_ensemble_engines(cfg, weights=args.weights)
 
         if args.benchmark:
-            print("\n⏱️  Running benchmark...")
+            print("\nRunning benchmark...")
             results = ensemble.benchmark(args.image, num_runs=100)
             print(
-                "\n📊 Benchmark Results (Ensemble of "
+                "\nBenchmark Results (Ensemble of "
                 f"{results['models_count']} models):"
             )
             print(
@@ -400,7 +400,7 @@ if __name__ == "__main__":
             for i, prob in enumerate(probs):
                 print(f"{class_names[i]}: {prob:.4f}")
     else:
-        print("🚀 Loading single TensorRT engine...")
+        print("Loading single TensorRT engine...")
         model_config = OmegaConf.load("configs/model/model1.yaml")
         engine_path = Path(cfg.data.output_dir) / "models" / "model1" / "model.trt"
 
@@ -412,9 +412,9 @@ if __name__ == "__main__":
         infer = TensorRTInfer(str(engine_path), model_config)
 
         if args.benchmark:
-            print("\n⏱️  Running benchmark...")
+            print("\nRunning benchmark...")
             results = infer.benchmark(args.image, num_runs=100)
-            print("\n📊 Benchmark Results:")
+            print("\nBenchmark Results:")
             print(
                 "   Mean inference time: "
                 f"{results['mean_ms']:.2f} ms ± {results['std_ms']:.2f} ms"
@@ -425,11 +425,11 @@ if __name__ == "__main__":
             pred_class, probs = infer.infer(args.image)
             class_names = ["CBB", "CBSD", "CGM", "CMD", "Healthy"]
 
-            print("=" * 50)
+            print("---------------------------------------------------------------------------")
             print(
                 "SINGLE MODEL RESULT: Predicted class "
                 f"{pred_class} - {class_names[pred_class]}"
             )
-            print("=" * 50)
+            print("=======================================================================================")
             for i, prob in enumerate(probs):
                 print(f"{class_names[i]}: {prob:.4f}")

@@ -45,8 +45,8 @@ def convert_to_onnx(checkpoint_path: str, output_path: str, model_config: DictCo
             onnx_model = onnx.load(temp_onnx)
             onnx.save(onnx_model, output_path, save_as_external_data=False)
 
-        print(f"✅ Model successfully converted to ONNX: {output_path}")
+        print(f"Model successfully converted to ONNX: {output_path}")
         return True
     except Exception as e:
-        print(f"❌ ONNX conversion failed: {e}")
+        print(f"ONNX conversion failed: {e}")
         return False

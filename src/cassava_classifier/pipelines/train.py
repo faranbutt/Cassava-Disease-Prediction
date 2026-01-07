@@ -134,7 +134,7 @@ def train_fold(fold: int, train_df, val_df, model_config: DictConfig, cfg: DictC
         create_metrics_plot(history_cb, str(plot_path))
         mlflow.log_artifact(str(plot_path), artifact_path="plots")
     except Exception as e:
-        print(f"Warning: couldn't create/log metrics plot: {e}")
+        print(f"Opps: couldnt create/log metrics plot: {e}")
     try:
         mlflow.log_artifact(best_ckpt_path, artifact_path="checkpoints")
         best_model = CassavaLightningModule.load_from_checkpoint(
@@ -147,7 +147,7 @@ def train_fold(fold: int, train_df, val_df, model_config: DictConfig, cfg: DictC
             registered_model_name=registered_model_name,
         )
     except Exception as e:
-        print(f"Warning: failed to log/register model to MLflow: {e}")
+        print(f"warning: failed to log/register model to MLflow: {e}")
     return best_ckpt_path
 
 
@@ -190,7 +190,7 @@ def train_model(cfg: DictConfig):
         df = df.sample(
             n=min(cfg.debug_samples, len(df)), random_state=cfg.train.seed
         ).reset_index(drop=True)
-        print(f"⚠️ DEBUG MODE: Using {len(df)} samples")
+        print(f"DEBUG MODE: Using {len(df)} samples")
 
     skf = StratifiedKFold(
         n_splits=cfg.train.n_splits, shuffle=True, random_state=cfg.train.seed
@@ -243,7 +243,7 @@ def train_all_models_and_ensemble(cfg: DictConfig):
             onnx_path = model_dir / "model.onnx"
 
             convert_to_onnx(str(checkpoint_path), str(onnx_path), model_cfg)
-            print(f"✅ ONNX exported: {onnx_path}")
+            print(f"onx exported: {onnx_path}")
             trt_path = model_dir / "model.trt"
             try:
                 subprocess.run(
@@ -258,19 +258,19 @@ def train_all_models_and_ensemble(cfg: DictConfig):
                     ],
                     check=True,
                 )
-                print(f"✅ TensorRT exported: {trt_path}")
+                print(f"tensorRT exported: {trt_path}")
             except Exception as e:
-                print(f"⚠️ TensorRT conversion failed for {model_name}: {e}")
+                print(f"tensorrt conversion failed for {model_name}: {e}")
             if not cfg.get("debug", False):
                 cleanup_fold_checkpoints(model_dir)
             else:
-                print("⚠️ Debug mode: keeping fold checkpoints")
+                print("Debug mode: keeping fold checkpoints")
 
         except Exception as e:
-            print(f"⚠️ ONNX conversion failed for {model_name}: {e}")
+            print(f"onnx conversion failed for {model_name}: {e}")
 
     try:
         ensemble_predict(cfg)
-        print("✅ Ensemble prediction completed")
+        print("ensemble prediction completed")
     except Exception as e:
-        print(f"⚠️ Ensemble prediction failed: {e}")
+        print(f"ensemble prediction failed: {e}")

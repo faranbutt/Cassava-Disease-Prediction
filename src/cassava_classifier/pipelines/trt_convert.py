@@ -21,7 +21,7 @@ def build_engine(onnx_file: Path, engine_file: Path, fp16: bool = False):
     input_proto = onnx_model.graph.input[0]
     shape = [d.dim_value for d in input_proto.type.tensor_type.shape.dim]
     _, c, h, w = shape
-    print(f"📐 ONNX input shape: (batch, {c}, {h}, {w})")
+    print(f"ONNX input shape: (batch, {c}, {h}, {w})")
 
     with open(onnx_file, "rb") as f:
         if not parser.parse(f.read()):
@@ -34,7 +34,7 @@ def build_engine(onnx_file: Path, engine_file: Path, fp16: bool = False):
 
     if fp16 and builder.platform_has_fast_fp16:
         config.set_flag(trt.BuilderFlag.FP16)
-        print("✅ FP16 enabled")
+        print("FP16 enabled")
     profile = builder.create_optimization_profile()
     input_tensor = network.get_input(0)
 
@@ -45,7 +45,7 @@ def build_engine(onnx_file: Path, engine_file: Path, fp16: bool = False):
         max=(1, c, h, w),
     )
     config.add_optimization_profile(profile)
-    print("🚀 Building TensorRT engine...")
+    print("Building TensorRT engine...")
     serialized_engine = builder.build_serialized_network(network, config)
     if serialized_engine is None:
         raise RuntimeError("TensorRT build failed")
@@ -53,7 +53,7 @@ def build_engine(onnx_file: Path, engine_file: Path, fp16: bool = False):
     engine_file.parent.mkdir(parents=True, exist_ok=True)
     with open(engine_file, "wb") as f:
         f.write(serialized_engine)
-    print(f"✅ TensorRT saved → {engine_file}")
+    print(f"TensorRT saved → {engine_file}")
 
 
 def main():

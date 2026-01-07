@@ -144,7 +144,7 @@ def predict_with_ensemble(
         weighted_sum += weights[i] * pred
     final_probs = weighted_sum / np.sum(weighted_sum)
     pred_class = int(np.argmax(final_probs))
-    print(f"✅ Ensemble prediction completed. Class: {pred_class}, Weights: {weights}")
+    print(f"Ensemble prediction completed. Class: {pred_class}, Weights: {weights}")
     return pred_class, final_probs[0]
 
 

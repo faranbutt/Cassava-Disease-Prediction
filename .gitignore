@@ -11,8 +11,6 @@ wheels/
 .dvc/cache/
 .dvc/tmp/
 outputs/
-mlartifacts/
-plots/
 mlruns/
 *.ckpt
 !deployment/triton/**/*.onnx

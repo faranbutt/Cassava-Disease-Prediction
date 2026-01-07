@@ -10,7 +10,6 @@ wheels/
 *.egg
 .dvc/cache/
 .dvc/tmp/
-outputs/
 mlruns/
 *.ckpt
 !deployment/triton/**/*.onnx

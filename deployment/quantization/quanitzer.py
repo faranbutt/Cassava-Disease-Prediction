@@ -6,7 +6,7 @@ models = {
     "model2": "triton/model2/1/model.onnx",
     "model3": "triton/model3/1/model.onnx",
 }
-output_dir = "triton_quantized"
+output_dir = "triton_quantizeds"
 os.makedirs(output_dir, exist_ok=True)
 for name, path in models.items():
     if not os.path.exists(path):

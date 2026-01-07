@@ -37,6 +37,7 @@ Cassava-Disease-Prediction/
 ├── artifacts/
 ├── plots/
 ├── models/
+├── outputs/
 │   ├── model1/
 |   |   ├── model1_best.ckpt
 |   |   ├── model1_best.onnx

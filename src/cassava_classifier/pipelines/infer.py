@@ -238,4 +238,3 @@ def ensemble_predict(cfg: DictConfig):
     print("\nENSEMBLE RESULTS:")
     print(f"Accuracy: {acc:.4f}")
     print(f"F1-Score: {f1:.4f}")
-    print(f"{'='*50}")

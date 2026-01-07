@@ -26,13 +26,10 @@ Thumbs.db
 
 .python-version
 uv.lock
-
 *.log
 lightning_logs/
-
 deployment/build/
 deployment/saree.egg-info/
-
 configs/**/__pycache__/
 configs/**/*.pyc
 models/
@@ -51,3 +48,4 @@ dataset/raw/label_num_to_disease_map.json
 /dataset
 artifacts/
 plots/
+outputs/

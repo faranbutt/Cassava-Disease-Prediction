@@ -1,0 +1,35 @@
+model:
+  name: vit_base_patch16_384
+  img_size: 384
+  use_multidrop: false
+  use_attention: false
+  label_smoothing: 0.0
+  divide_image: false
+  pretrained: true
+train:
+  batch_size: 32
+  epochs: 4
+  lr: 0.0001
+  precision: 16-mixed
+  num_workers: 2
+  seed: 1006
+  n_splits: 2
+  patience: 5
+  log_every_n_steps: 10
+  mlflow:
+    tracking_uri: sqlite:///mlflow.db
+    experiment_name: cassava-disease-classification
+    artifact_location: ./mlartifacts
+data:
+  dataroot: /kaggle/input/cassava-leaf-disease-classification
+  output_dir: /kaggle/working/Cassava-Disease-Prediction
+model_name: model1
+debug: true
+debug_samples: 100
+run_full: true
+artifacts:
+  save_ckpt: false
+  save_onnx: true
+predict:
+  model_path: models/model1/model_best.ckpt
+  image_path: data/example.jpg

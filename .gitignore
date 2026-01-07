@@ -46,5 +46,5 @@ dataset/raw/test_tfrecords/
 dataset/raw/test_tfrecords/
 dataset/raw/label_num_to_disease_map.json
 /dataset
-outputs/
 artifacts/
+plots/

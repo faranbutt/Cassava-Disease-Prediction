@@ -1,6 +1,6 @@
 # 🌿 Cassava Leaf Disease Classification
 
-A **high-performance, production-ready deep learning system** for cassava leaf disease classification
+A **high-performance, production-ready deep learning system** for cassava leaf disease classifications
 This project leverages **Vision Transformers (ViT)**, **image patch division**, **attention-based weighting**, and **ensemble learning**, wrapped inside a **full MLOps pipeline** from training to Triton-based deployment.
 
 ---
